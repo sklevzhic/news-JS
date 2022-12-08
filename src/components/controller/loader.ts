@@ -1,13 +1,13 @@
+import { Methods } from "../../types/Methods";
+import { Endpoints } from "../../types/Endpoints";
+
 class Loader {
-    // baseLink: any,
-    // options: any
-    baseLink: any;
+    baseLink: string;
     options: any;
-    constructor(baseLink: any, options: any) {
+    constructor(baseLink: string, options: any) {
         this.baseLink = baseLink;
         this.options = options;
     }
-
 
     getResp(
         { endpoint, options = {} },
@@ -15,7 +15,7 @@ class Loader {
             console.error('No callback for GET response');
         }
     ) {
-        this.load('GET', endpoint, callback, options);
+        this.load(Methods.GET, endpoint, callback, options);
     }
 
     errorHandler(res: any) {
@@ -28,7 +28,7 @@ class Loader {
         return res;
     }
 
-    makeUrl(options: any, endpoint: any) {
+    makeUrl(options: any, endpoint: Endpoints) {
         const urlOptions = { ...this.options, ...options };
         let url = `${this.baseLink}${endpoint}?`;
 
@@ -39,8 +39,9 @@ class Loader {
         return url.slice(0, -1);
     }
 
-    load(method: any, endpoint: any, callback: any, options = {}) {
-        fetch(this.makeUrl(options, endpoint), { method })
+    load(method: Methods, endpoint: Endpoints, callback: any, options = {}) {
+        const url: string = this.makeUrl(options, endpoint)
+        fetch(url, { method })
             .then(this.errorHandler)
             .then((res) => res.json())
             .then((data) => callback(data))

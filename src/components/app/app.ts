@@ -1,9 +1,12 @@
 import AppController from "../controller/controller";
 import { AppView } from "../view/appView";
+import Controller from "../controller/controller";
+import { ArticlesResponse } from "../../types/ArticlesResponse";
+import { SourcesResponse } from "../../types/SourcesResponse";
 
 class App {
-  controller: any;
-  view: any;
+  controller: Controller;
+  view: AppView;
   constructor() {
     this.controller = new AppController();
     this.view = new AppView();
@@ -14,10 +17,10 @@ class App {
 
     if (sources) {
       sources.addEventListener("click", (e) => {
-        this.controller.getNews(e, (data: any) => this.view.drawNews(data))
+        this.controller.getNews(e, (data: ArticlesResponse) => this.view.drawNews(data))
       });
     }
-    this.controller.getSources((data: any) => this.view.drawSources(data));
+    this.controller.getSources((data: SourcesResponse) => this.view.drawSources(data));
   }
 }
 
